@@ -16,6 +16,18 @@ public class ButtonManager : MonoBehaviour {
 	private List<DoorScript> greenDoors = new List<DoorScript>();
 	private List<DoorScript> blueDoors = new List<DoorScript>();
 
+	[SerializeField]
+	private float buttonNonInteractiveTime;
+
+	private bool isButtonInteractive = true;
+
+	IEnumerator DisableButtonIteraction()
+	{
+		isButtonInteractive = false;
+		yield return new WaitForSeconds(buttonNonInteractiveTime);
+		isButtonInteractive = true;
+	}
+
 	private void Start() {
 		Button[] buttons = FindObjectsOfType<Button>();
 		DoorScript[] doors = FindObjectsOfType<DoorScript>();
@@ -61,32 +73,36 @@ public class ButtonManager : MonoBehaviour {
 	}
 
 	public void TriggerButton(Button.BUTTON_COLOR color) {
-		if(color == Button.BUTTON_COLOR.RED){
-			foreach(Button b in redButtons) {
-				isRedEnabled = !isRedEnabled;
-				b.SetButtonActive(isRedEnabled);
+		if(isButtonInteractive)
+		{
+			if(color == Button.BUTTON_COLOR.RED){
+				foreach(Button b in redButtons) {
+					isRedEnabled = !isRedEnabled;
+					b.SetButtonActive(isRedEnabled);
+				}
+				foreach(DoorScript d in redDoors) {
+					d.SetDoorActive(isRedEnabled);
+				}
 			}
-			foreach(DoorScript d in redDoors) {
-				d.SetDoorActive(isRedEnabled);
+			else if(color == Button.BUTTON_COLOR.GREEN) {
+				foreach(Button b in greenButtons) {
+					isGreenEnabled = !isGreenEnabled;
+					b.SetButtonActive(isGreenEnabled);
+				}
+				foreach(DoorScript d in greenDoors) {
+					d.SetDoorActive(isGreenEnabled);
+				}
 			}
-		}
-		else if(color == Button.BUTTON_COLOR.GREEN) {
-			foreach(Button b in greenButtons) {
-				isGreenEnabled = !isGreenEnabled;
-				b.SetButtonActive(isGreenEnabled);
+			else if(color == Button.BUTTON_COLOR.BLUE) {
+				foreach(Button b in blueButtons) {
+					isBlueEnabled = !isBlueEnabled;
+					b.SetButtonActive(isBlueEnabled);
+				}
+				foreach(DoorScript d in blueDoors) {
+					d.SetDoorActive(isBlueEnabled);
+				}
 			}
-			foreach(DoorScript d in greenDoors) {
-				d.SetDoorActive(isGreenEnabled);
-			}
-		}
-		else if(color == Button.BUTTON_COLOR.BLUE) {
-			foreach(Button b in blueButtons) {
-				isBlueEnabled = !isBlueEnabled;
-				b.SetButtonActive(isBlueEnabled);
-			}
-			foreach(DoorScript d in blueDoors) {
-				d.SetDoorActive(isBlueEnabled);
-			}
+			StartCoroutine(DisableButtonIteraction());
 		}
 	}
 }

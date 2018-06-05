@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
+	[SerializeField]
+	private string horizontalMovement;
+
+	[SerializeField]
+	private string verticalMovement;
+
 	private PlayerMovement m_playerMovement;
 
 	void Start () {
@@ -11,7 +17,7 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	void FixedUpdate () {
-		Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+		Vector2 input = new Vector2(Input.GetAxisRaw(horizontalMovement), Input.GetAxisRaw(verticalMovement));
 		m_playerMovement.Move(input);
 	}
 }

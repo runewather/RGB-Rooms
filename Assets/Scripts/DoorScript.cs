@@ -17,32 +17,40 @@ public class DoorScript : MonoBehaviour {
 	
 	private Vector3 initPos;
 
+	private bool isMoving = false;
+
 	void Start () {
 		initPos = transform.position;
 		rb = GetComponent<Rigidbody>();
 	}
 	
 	public void SetDoorActive(bool isActive) {
-		if(isActive) {
+		if (!isMoving) 
+		{	
+			if(isActive) {
 			StartCoroutine(OpenDoor());
-		}
-		else {
-			StartCoroutine(CloseDoor());
+			}
+			else {
+				StartCoroutine(CloseDoor());
+			}
 		}
 	}
 
 	IEnumerator OpenDoor() {
+		isMoving = true;
 		while(Vector3.Distance(transform.position, target.position) >= 0.1f) {
-			print(Vector3.Distance(transform.position, target.position));
 			transform.position = Vector3.MoveTowards(transform.position, target.position, 0.05f);
 			yield return null;
 		}
+		isMoving = false;
 	}
 
 	IEnumerator CloseDoor() {
+		isMoving = true;
 		while(Vector3.Distance(transform.position, initPos) >= 0.1f) {
 			transform.position = Vector3.MoveTowards(transform.position, initPos, 0.05f);
 			yield return null;	
 		}
+		isMoving = false;
 	}
 }
