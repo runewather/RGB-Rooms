@@ -70,11 +70,19 @@ public class ButtonManager : MonoBehaviour {
 		foreach(DoorScript d in greenDoors) {
 			d.SetDoorActive(false);
 		}
+		foreach(Button b in blueButtons) {
+			isGreenEnabled = false;
+			b.SetButtonActive(isBlueEnabled);
+		}
+		foreach(DoorScript d in blueDoors) {
+			d.SetDoorActive(false);
+		}
 	}
 
 	public void TriggerButton(Button.BUTTON_COLOR color) {
 		if(isButtonInteractive)
 		{
+			DisableAll();
 			if(color == Button.BUTTON_COLOR.RED){
 				foreach(Button b in redButtons) {
 					isRedEnabled = !isRedEnabled;
